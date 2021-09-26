@@ -65,7 +65,7 @@ app.get('/todos/:id/edit', (req, res) => {
     .catch(error => console.log(error))
 })
 
-//
+//這個是把更新好的todo儲存後回傳給首頁渲染的東西
 app.post('/todos/:id/edit', (req, res) => {
   const id = req.params.id
   const name = req.body.name
@@ -75,6 +75,15 @@ app.post('/todos/:id/edit', (req, res) => {
       return todo.save()
     })
     .then(() => res.redirect(`/todos/${id}`))
+    .catch(error => console.log(error))
+})
+
+//這是刪除todo的東西
+app.post('/todos/:id/delete', (req, res) => {
+  const id = req.params.id
+  return Todo.findById(id)
+    .then(todo => todo.remove())
+    .then(() => res.redirect('/'))
     .catch(error => console.log(error))
 })
 
