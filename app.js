@@ -1,5 +1,6 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const exphbs = require('express-handlebars')
 const app = express()
 
 //這段用來連接資料庫,最後面的todo-list就是我在robo-3t裡新增的database名稱
@@ -16,8 +17,11 @@ db.once('open', () => {
   console.log('mongodb connected!')
 })
 
+app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
+app.set('view engine', 'hbs')
+
 app.get('/', (req, res) => {
-  res.send(`it will be todo-list`)
+  res.render('index')
 })
 
 app.listen(3000, () => {
