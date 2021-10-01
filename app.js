@@ -68,10 +68,11 @@ app.get('/todos/:id/edit', (req, res) => {
 //這個是把更新好的todo儲存後回傳給首頁渲染的東西
 app.post('/todos/:id/edit', (req, res) => {
   const id = req.params.id
-  const name = req.body.name
+  const { name , isDone } = req.body
   return Todo.findById(id)
     .then(todo => {
       todo.name = name
+      todo.isDone = isDone === 'on'
       return todo.save()
     })
     .then(() => res.redirect(`/todos/${id}`))
