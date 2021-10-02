@@ -1,6 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const exphbs = require('express-handlebars')
+const methodOverride = require('method-override')
 
 const Todo = require('./models/todo') // 載入 Todo model
 const app = express()
@@ -25,6 +26,8 @@ app.set('view engine', 'hbs')
 //使用body parser
 //這樣req裡的東西才能拿出來使用傳來傳去
 app.use(express.urlencoded({ extended: true }))
+
+app.use(methodOverride('_method'))
 
 //這個是瀏覽首頁
 app.get('/', (req, res) => {
@@ -67,9 +70,9 @@ app.get('/todos/:id/edit', (req, res) => {
 })
 
 //這個是把更新好的todo儲存後回傳給首頁渲染的東西
-app.post('/todos/:id/edit', (req, res) => {
+app.put('/todos/:id', (req, res) => {
   const id = req.params.id
-  const { name , isDone } = req.body
+  const { name, isDone } = req.body
   return Todo.findById(id)
     .then(todo => {
       todo.name = name
@@ -81,7 +84,7 @@ app.post('/todos/:id/edit', (req, res) => {
 })
 
 //這是刪除todo的東西
-app.post('/todos/:id/delete', (req, res) => {
+app.delete('/todos/:id', (req, res) => {
   const id = req.params.id
   return Todo.findById(id)
     .then(todo => todo.remove())
